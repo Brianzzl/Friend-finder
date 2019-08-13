@@ -13,9 +13,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // Import api routing file
-require('./app/routes/apiRoutes')(app);
+require('./app/routing/apiRoutes')(app);
 // Import html routing file
-require('./app/routes/htmlRoutes')(app);
+require('./app/routing/htmlRoutes')(app);
 
 
 app.listen(PORT, function() {
