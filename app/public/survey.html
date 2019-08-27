@@ -3,19 +3,19 @@
         <head>
                 <meta charset="UTF-8">
                 <title>FriendFinder</title>
-              
+
                 <!-- Latest compiled and minified CSS & JS -->
                 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
                 <script src="https://code.jquery.com/jquery.js"></script>
                 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-              
+
                 <!-- Font Awesome Glyphicons -->
                 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
-              
+
                 <!-- Chosen -->
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.5.1/chosen.css">
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.5.1/chosen.jquery.min.js"></script>
-              
+
               </head>
 <body>
     <div class="container">
@@ -140,10 +140,10 @@
             Submit</button>
 
 
-        
+
         <div id="results-modal" class="modal fade" role="dialog">
                 <div class="modal-dialog">
-            
+
                   <!-- Modal content-->
                   <div class="modal-content">
                     <div class="modal-header">
@@ -158,7 +158,7 @@
                       <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                   </div>
-            
+
                 </div>
               </div>
         <footer class="footer">
@@ -219,7 +219,7 @@
         var userData = {
           name: $("#name").val(),
           photo: $("#photo").val(),
-          scores: [
+          score: [
             $("#q1").val(),
             $("#q2").val(),
             $("#q3").val(),
@@ -247,6 +247,37 @@
       } else {
         alert("Please fill out all fields before submitting!");
       }
+//=====================================================================
+      function bestMatch(data){
+        var len = data.length;
+        var matchResultIndex =[];
+        for(var i=0;i<len-1;i++){
+          var newUserData = data[len-1].score;
+          var userdb = data[i].score;
+          // console.log(newUserData);
+          // console.log(userdb);
+          var matchCalculation =0;
+          for(var j=0;j<10;j++){
+            matchCalculation += Math.abs(parseInt(newUserData[j]) -parseInt(userdb[j]));
+          }
+          matchResultIndex.push(matchCalculation);
+        }
+        // console.log(matchResultIndex);
+        const index = matchResultIndex.indexOf(Math.min(...matchResultIndex));
+        return index;
+      }
+
+      $.get("/api/friends",function(data){
+        var matchIndex = bestMatch(data);
+        $("#match-name").text(data[matchIndex].name);
+        $("#match-img").attr('src',data[matchIndex].photo);
+        console.log(data[matchIndex].photo);
+        console.log(data[matchIndex].name);
+      })
+
+
+//=======================================================================
+
     });
   </script>
 </html>
